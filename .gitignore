@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+.venv
+
+# Data
+data/raw/*
+!data/raw/.gitkeep
+
+# Reports
+reports/*.png
+reports/metrics.json

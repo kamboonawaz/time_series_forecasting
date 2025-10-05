@@ -1,0 +1,12 @@
+seed: 42
+horizon: 12
+initial_train_periods: 60
+models:
+  - name: moving_average
+    window: 3
+  - name: arima
+    order: [1,1,1]
+  - name: prophet
+    daily_seasonality: false
+    weekly_seasonality: false
+    yearly_seasonality: true
