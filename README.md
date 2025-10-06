@@ -1,24 +1,40 @@
-# Time Series Model Comparison
+# Time Series Forecasting (Moving Average vs ARIMA)
 
-Notebook-only implementation comparing Moving Average, ARIMA, and (optionally) Prophet on a synthetic monthly series dataset.
+Lightweight project comparing two simple forecasting approaches (Moving Average and ARIMA) on a synthetic monthly time series with trend + seasonality.
 
 ## Goals
-- Unified interface for multiple forecasting models
+- Compare smoothing vs statistical model
 - Rolling-origin evaluation (walk-forward)
 - Metrics: sMAPE, MAE
-- Simple plots of forecast vs actual
+- Simple matplotlib visualization
 
-## Quick Start (Notebook Only)
+## Quick Start
 1. Install dependencies:
 ```
 python -m pip install -r requirements.txt
 ```
-2. Open: `notebooks/project_notebook.ipynb`
-3. Run cells in order (they generate data, train models, evaluate, visualize, and optionally retune).
+2. Open `notebooks/project_notebook.ipynb` and run cells in order (generate data, train models, evaluate, visualize, retune).
 
 Outputs (plots, metrics DataFrames) are displayed in the notebook; a `reports/` directory may contain generated images if created by plotting cells.
 
-## Folder Structure (Notebook-Only)
+## Sample Output
+Example rolling-origin evaluation (values illustrative; yours may vary slightly due to stochastic noise):
+
+| model              | sMAPE | MAE   |
+|--------------------|------:|------:|
+| MovingAverage(w=3) | 5.13  | 28.12 |
+| ARIMA(1,1,1)       | 4.30  | 23.88 |
+
+After simple tuning:
+
+| model                | sMAPE | MAE   |
+|----------------------|------:|------:|
+| MovingAverage(w=5)   | 4.95  | 26.70 |
+| ARIMA(2,1,2)         | 3.90  | 21.55 |
+
+Interpretation: ARIMA captures trend & seasonality better on this synthetic dataset, producing lower symmetric MAPE and MAE.
+
+## Folder Structure
 ```
 data/            # raw & processed time series (auto-created by notebook)
 notebooks/       # main project notebook(s)
@@ -27,19 +43,22 @@ requirements.txt # pinned dependencies
 README.md
 ```
 
-All former Python scripts have been removed; logic now lives inside the notebook cells.
+Logic is implemented in a single notebook for simplicity.
 
 ## Reproducing Without the Notebook
-If you later need scripts again, export the notebook:
+If you need a script version, export the notebook:
 ```
 jupyter nbconvert --to script notebooks/project_notebook.ipynb
 ```
 This will produce a `.py` file you can refactor into modules.
 
 ## Future Enhancements
-- Add interactive widgets (sliders for window size / ARIMA order)
-- Add environment freeze cell (pip freeze > requirements.lock)
-- Integrate nbclient execution in CI for regression testing
+- Interactive widget (slider for window size / ARIMA order)
+- Environment freeze cell (`pip freeze > requirements.lock`)
+- Residual diagnostics (ACF/PACF) & stationarity test (ADF)
+- Lag-feature ML model benchmark (e.g., gradient boosting)
+- Automated execution in CI (nbclient)
 
 ## Notes
-Prophet is optional. If unavailable, its results will show NaNs in the results table.
+- Synthetic data allows quick, reproducible experimentation.
+- Metrics may change slightly run-to-run due to generated noise (seeded to reduce variance).
